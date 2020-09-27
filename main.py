@@ -6,7 +6,7 @@ from controller import PIDcontroller
 import time
 frameX, frameY = 1000, 1000
 
-roomba = robot(frameX, frameY, 100, 100, math.radians(180), 0.05)
+mecanumRobot = robot(frameX, frameY, 100, 100, math.radians(180), 0.05)
 
 path = [(100, 100), (500, 100), (500, 500), (100, 500), (350, 0), (100, 100)]
 pathRender = pathRenderer(path)
@@ -32,17 +32,17 @@ def followPath(canvas):
     global timeAtPointArrival
     global currentPointInPath
     global timeAtPoint
-    distance = calculateDistance(roomba.robotX, roomba.robotY,
+    distance = calculateDistance(mecanumRobot.robotX, mecanumRobot.robotY,
                                  path[currentPointInPath][0], path[currentPointInPath][1])
-    xDist = roomba.robotX - path[currentPointInPath][0]
-    yDist = roomba.robotY - path[currentPointInPath][1]
+    xDist = mecanumRobot.robotX - path[currentPointInPath][0]
+    yDist = mecanumRobot.robotY - path[currentPointInPath][1]
 
     robotSpeedX = driveControllerX.update(xDist,0)
     robotSpeedY = driveControllerY.update(yDist,0)
-    roomba.drawRobotSimpleGUI(canvas)
+    mecanumRobot.drawRobotSimpleGUI(canvas)
     if currentPointInPath != len(path):
-        roomba.interpolatePoisitionByFrame(path[currentPointInPath][0], path[currentPointInPath][1],
-                                           robotSpeedX=robotSpeedX, robotSpeedY = robotSpeedY, telemetry=True)
+        mecanumRobot.interpolatePoisitionByFrame(path[currentPointInPath][0], path[currentPointInPath][1],
+                                                 robotSpeedX=robotSpeedX, robotSpeedY = robotSpeedY, telemetry=True)
     if distance <= advancePointDistance and currentPointInPath < len(path) - 1:
         if not atPoint:
             timeAtPointArrival = time.time()
@@ -66,7 +66,7 @@ def draw(canvas):
 
 
 if __name__ == "__main__":
-    frame = simplegui.create_frame("Roomba simulator", frameX, frameY)
+    frame = simplegui.create_frame("simulator", frameX, frameY)
     frame.set_draw_handler(draw)
 
     frame.start()

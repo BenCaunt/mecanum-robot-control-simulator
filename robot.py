@@ -1,5 +1,6 @@
 import math
 from controller import PIDcontroller
+import random
 frictionDivisor = 1.1
 turnController = PIDcontroller(1,0,0)
 class robot:
@@ -34,8 +35,8 @@ class robot:
         while math.degrees(self.robotOrientation) >= 180:
             self.robotOrientation -= math.pi
         self.robotOrientation += turn_response
-        robotSpeedX += self.lastSpeedX / frictionDivisor
-        robotSpeedY += self.lastSpeedY / frictionDivisor
+        robotSpeedX += (self.lastSpeedX + self.generateMovementNoise()) / frictionDivisor
+        robotSpeedY += (self.lastSpeedY + self.generateMovementNoise()) / frictionDivisor
         # drive forward based on the current heading of the robot as this is a differential drive roomba
         self.robotX += robotSpeedX
         self.robotY += robotSpeedY
@@ -45,3 +46,5 @@ class robot:
 
         if telemetry:
             print(f"output: {turn_response} theta: {math.degrees(self.robotOrientation)} target: {math.degrees(target_angle)}")
+    def generateMovementNoise(self):
+        return random.random() / 30
